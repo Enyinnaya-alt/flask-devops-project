@@ -31,4 +31,15 @@ jobs:
           tags: |
             twofish007/flask-devops-app:latest
             twofish007/flask-devops-app:${{ github.sha }}
-### About this Project
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Monitoring Tests
+        run: |
+          docker-compose -f docker-compose.monitoring.yml up -d
+          curl --retry 5 --retry-delay 3 http://localhost:9090/-/healthy
