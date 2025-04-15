@@ -1,0 +1,10 @@
+groups:
+- name: flask-alerts
+  rules:
+  - alert: HighRequestLatency
+    expr: flask_http_request_duration_seconds_bucket{le="0.5"} < 0.9
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: "High latency on {{ $labels.instance }}"
