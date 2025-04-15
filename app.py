@@ -1,10 +1,18 @@
+# app.py
 from flask import Flask
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
+
+# Custom metric example
+metrics.info('app_info', 'Application info', version='1.0')
 
 @app.route('/')
-def hello_devops():
+def hello():
     return "Hello DevOps!"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5050)
+@app.route('/health')
+@metrics.do_not_track()
+def health():
+    return "OK", 200
